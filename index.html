@@ -153,7 +153,7 @@
 <body>
 
     <header>
-        <h1>🎮 國小社會魔法學院</h1>
+        <h1>🌟 國小社會樂學網</h1>
         <div class="nav-controls">
             <select id="gradeSelect">
                 <option value="grade3_term2">三年級 (下學期)</option>
@@ -186,27 +186,25 @@
     </div>
 
     <script>
-        /* ================= MVC: Model (資料層) ================= */
-        // 注意：現在每個單元使用 questionGroups 陣列，裡面包含 5 個陣列（組別 1~5）
+        /* ================= MVC: Model (資料層 - 嚴格遵守課綱) ================= */
         const knowledgeBase = {
             grade3_term2: {
                 unit1: {
-                    title: "第一單元：生活理財大師",
+                    title: "【第一單元】生活理財",
                     sections: [
                         {
-                            title: "第1課：理性消費你我他 🛒",
+                            title: "第1課 理性消費你我他",
                             content: `<div class="story-box">👦 <strong>主角小豆子的故事：</strong><br>星期天，小豆子跟媽媽去超級市場。小豆子的水壺破洞了，所以必須買一個新水壺。但是經過玩具區時，小豆子看到最新款的變形機器人，拉著媽媽的手說：「哇！我好想要這個喔！」</div>故事中，買新水壺是因為沒有它就沒辦法喝水，這叫做<span class="keyword">需要</span>。變形機器人只是為了一時開心，這叫做<span class="keyword">想要</span>。<br><strong>💡 知識小超人說：</strong>先滿足需要，再考慮想要，這就是<strong>理性消費</strong>！`,
                             infographic: `<div class="infographic"><div class="info-box vs"><span class="info-icon">💧</span><strong style="color:#2980B9;">「需要」的物品</strong></div><div class="info-box"><span class="info-icon">🎮</span><strong style="color:#C0392B;">「想要」的物品</strong></div></div>`,
                             thinkBox: `🤔 <strong>腦力激盪時間：</strong>冬天超級冷，小豆子買了一件厚外套。請問這是需要還是想要？<br>💡 魔法解答區：<span class="hover-reveal">是「需要」！因為不穿厚外套會感冒生病喔！</span>`
                         },
                         {
-                            title: "第2課：小豬撲滿的秘密 (儲蓄與記帳) 🐷",
+                            title: "第2課 儲蓄為理財之本",
                             content: `<div class="story-box">💰 <strong>小豆子的夢想：</strong><br>小豆子超級想買一台腳踏車，可是腳踏車很貴，他的零用錢不夠。爸爸笑著給了他一本小本子和一隻小豬撲滿，告訴他：「學會這兩招，夢想就能實現喔！」</div>第一招叫做<span class="keyword">儲蓄</span>，就是忍住把錢花光光的衝動，把剩下的錢放進撲滿裡存起來。<br>第二招叫做<span class="keyword">記帳</span>，就像是幫金錢寫日記。拿到零用錢叫做「收入」，買文具花掉的錢叫做「支出」，最後剩下的錢叫做「結餘」。`,
                             infographic: `<div class="infographic"><div class="info-box" style="background:#FEF9E7; border-color:#F1C40F;"><strong style="color:#D68910; font-size:1.2rem;">小超人的記帳公式</strong><div style="text-align:left; margin-top:15px; font-size:1.1rem; background:white; padding:10px; border-radius:10px;">➕ <strong>收入：</strong> 得到的錢<br>➖ <strong>支出：</strong> 花掉的錢<br><hr>🟰 <strong>結餘：</strong> 剩下的錢</div></div></div>`,
                             thinkBox: `🤔 <strong>金頭腦算一算：</strong>小豆子這個月拿到 500 元零用錢，他買了一盒 100 元的彩色筆。請問他的「結餘」是多少錢？<br>💡 魔法解答區：<span class="hover-reveal">500(收入) - 100(支出) = 400(結餘)。</span>`
                         }
                     ],
-                    // 分為 5 組，每組 10 題
                     questionGroups: [
                         [ // 第 1 組 (1-10題)
                             { id: "u1_g1_q1", text: "下列哪一個物品屬於維持生活「需要」的東西？", options: ["最新款的遊戲機", "每天喝的水", "遊樂園的門票", "好吃的巧克力"], answer: 1, explanation: "水是維持生命所必需的，屬於「需要」。" },
@@ -220,41 +218,27 @@
                             { id: "u1_g1_q9", text: "天氣變冷了，小光買了一件保暖的外套。請問這件外套是？", options: ["需要", "想要", "浪費", "借來的"], answer: 0, explanation: "為了保暖不感冒，外套是生活上的「需要」。" },
                             { id: "u1_g1_q10", text: "下列哪一個不是我們儲蓄的目的？", options: ["為了買未來的夢想物品", "應付突然生病看醫生的錢", "為了每天買很多零食吃", "為了未來學習的基金"], answer: 2, explanation: "每天買零食花掉錢是消費，不是儲蓄的目的。" }
                         ],
-                        [ // 第 2 組 (11-20題)
-                            { id: "u1_g2_q1", text: "在記帳本中，「結餘」的意思是什麼？", options: ["花掉的錢", "得到的錢", "收入減去支出的錢", "想買的東西的價錢"], answer: 2, explanation: "結餘 = 收入 - 支出，代表你現在手邊還剩下的錢。" },
-                            { id: "u1_g2_q2", text: "逛超市時，遇到「買一送一」的促銷，我們應該怎麼做？", options: ["不管需不需要都買", "先想清楚家裡需不需要", "全部買下來再丟掉", "把錢全部花光"], answer: 1, explanation: "遇到促銷也要保持冷靜，評估是否真正「需要」才不會浪費。" },
-                            { id: "u1_g2_q3", text: "小亮這個月的零用錢有 500 元，花了 300 元買文具，結餘是多少？", options: ["800元", "300元", "200元", "500元"], answer: 2, explanation: "500(收入) - 300(支出) = 200(結餘)。" },
-                            { id: "u1_g2_q4", text: "當「想要」的東西很多，但錢不夠時，應該怎麼辦？", options: ["偷拿別人的錢", "分出輕重緩急，先買最重要的", "大哭大鬧", "跟老闆說賒帳"], answer: 1, explanation: "資源有限時，要學會排序，選擇最重要或最需要的優先。" },
-                            { id: "u1_g2_q5", text: "下列哪一種是幫助我們控制花費的好工具？", options: ["電視", "記帳本", "故事書", "電動玩具"], answer: 1, explanation: "記帳本可以幫助我們追蹤金錢流向，控制花費。" },
-                            { id: "u1_g2_q6", text: "小明發現同樣的鞋子在網路上比較便宜。為了省錢他在網路購買，這稱為什麼？", options: ["浪費時間", "貨比三家", "衝動購物", "不想出門"], answer: 1, explanation: "買東西前多比較價格，找出最划算的選擇，這叫做「貨比三家」。" },
-                            { id: "u1_g2_q7", text: "下列哪一種情況最可能是因為「沒有記帳」造成的？", options: ["零用錢突然變多", "不知道錢花去哪裡，月底就沒錢了", "考試考一百分", "撲滿滿出來了"], answer: 1, explanation: "沒有記帳就無法掌握金錢的流向，很容易不知不覺就把錢花光了。" },
-                            { id: "u1_g2_q8", text: "為了避免去超市買了太多「想要」但不「需要」的東西，出門前最好怎麼做？", options: ["帶很多很多錢", "把眼睛矇起來", "寫好購物清單", "餓著肚子去"], answer: 2, explanation: "寫好購物清單並嚴格遵守，可以有效防止衝動購物。" },
-                            { id: "u1_g2_q9", text: "如果發現自己這個月的「支出」大於「收入」，代表什麼意思？", options: ["錢越變越多", "變成大富翁了", "入不敷出（錢不夠花）", "記帳本壞掉了"], answer: 2, explanation: "花掉的錢（支出）比得到的錢（收入）還要多，就叫做入不敷出。" },
-                            { id: "u1_g2_q10", text: "爸爸發薪水時，會先固定把 3000 元存進銀行，剩下的才拿來當生活費。這是什麼好習慣？", options: ["先儲蓄後消費", "先消費後儲蓄", "亂花錢", "跟銀行借錢"], answer: 0, explanation: "拿到錢先強制存下一筆金額，確保每個月都有儲蓄，是很好的理財觀念。" }
-                        ],
-                        [], // 第 3 組 (待擴充)
-                        [], // 第 4 組 (待擴充)
-                        []  // 第 5 組 (待擴充)
+                        [], [], [], [] // 預留 第 2~5 組供日後擴充
                     ]
                 },
                 unit2: {
-                    title: "第二單元：居住的地方 🏡",
+                    title: "【第二單元】居住的地方",
                     sections: [
                         {
-                            title: "第1課：認識居住的地方 🌳",
+                            title: "第1課 認識居住的地方",
                             content: `<div class="story-box">👦 <strong>小豆子的社區探險：</strong><br>小豆子帶著望遠鏡在家附近探險。他看到社區後面有一座綠油油的小山丘和彎彎的小河；社區前面則有便利商店、柏油路和一間大廟。</div>我們居住的地方包含了兩種環境：大自然原本就有的叫做<span class="keyword">自然環境</span>（例如山丘、小河）；人類為了生活方便而建造的叫做<span class="keyword">人文環境</span>（例如道路、商店、廟宇）。`,
                             infographic: `<div class="infographic"><div class="info-box vs" style="border-color:#27AE60;"><span class="info-icon">⛰️</span><strong style="color:#27AE60;">自然環境</strong></div><div class="info-box" style="border-color:#8E44AD;"><span class="info-icon">🏫</span><strong style="color:#8E44AD;">人文環境</strong></div></div>`,
                             thinkBox: `🤔 <strong>腦力激盪：</strong>社區裡的「公園」有樹木也有草地，它是自然環境還是人文環境呢？<br>💡 魔法解答區：<span class="hover-reveal">是「人文環境」！雖然有植物，但是公園是人類規劃和建造給大家休息的地方喔。</span>`
                         },
                         {
-                            title: "第2課：探索家鄉的方法 🗺️",
+                            title: "第2課 認識居住地方的方法",
                             content: `<div class="story-box">👴 <strong>小豆子問爺爺：</strong><br>小豆子想知道家鄉以前長什麼樣子。爺爺拿出了一張舊地圖，並跟小豆子說了好多以前在這裡蓋房子的故事。</div>要認識居住的地方，我們可以透過<span class="keyword">訪問長輩</span>來了解以前的故事，也可以利用<span class="keyword">地圖</span>來清楚知道街道、學校和河川的位置。現在我們還能上網查詢資料呢！`,
                             infographic: `<div class="infographic"><div class="info-box" style="background:#FEF9E7;"><strong style="color:#D68910;">🔍 探索家鄉三法寶</strong><div style="text-align:left; margin-top:10px; font-size:1rem; background:white; padding:10px; border-radius:10px;">🗺️ 看地圖<br>👴 問長輩<br>💻 查網路</div></div></div>`,
                             thinkBox: `🤔 <strong>腦力激盪：</strong>如果小豆子想知道怎麼從家裡最快走到圖書館，他應該用哪一個法寶？<br>💡 魔法解答區：<span class="hover-reveal">使用「地圖」或手機導航，可以最快看出街道的路線！</span>`
                         }
                     ],
                     questionGroups: [
-                        [ // 第 1 組
+                        [ // 第 1 組 (1-10題)
                             { id: "u2_g1_q1", text: "下列哪一個屬於「自然環境」？", options: ["便利商店", "高速公路", "天然的河流", "圖書館"], answer: 2, explanation: "河流是大自然產生的，屬於自然環境。" },
                             { id: "u2_g1_q2", text: "下列哪一個屬於「人文環境」？", options: ["高山", "學校", "森林", "海洋"], answer: 1, explanation: "學校是人類為了教育而建造的，屬於人文環境。" },
                             { id: "u2_g1_q3", text: "要想知道家鄉以前的樣子，最好的方法是？", options: ["問外星人", "訪問地方上的長輩", "看昨天的報紙", "查字典"], answer: 1, explanation: "地方耆老(長輩)了解家鄉歷史，是很好的訪問對象。" },
@@ -266,32 +250,111 @@
                             { id: "u2_g1_q9", text: "關於自然環境與人文環境的關係，哪一個說法是正確的？", options: ["人文環境越少越好", "兩者會互相影響", "自然環境會自己變成房子", "兩者完全沒有關係"], answer: 1, explanation: "人類會在自然環境中建造房屋，同時也需要保護自然環境，兩者息息相關。" },
                             { id: "u2_g1_q10", text: "去訪問長輩家鄉歷史前，我們應該先做什麼準備？", options: ["準備好要問的問題", "帶電動玩具去打", "準備睡覺", "什麼都不用準備"], answer: 0, explanation: "訪問前應該先列好訪綱（要問的問題），才是有禮貌且有效率的做法。" }
                         ],
-                        [ // 第 2 組
-                            { id: "u2_g2_q1", text: "下列哪一個是我們每天上學會經過的「人文環境」？", options: ["天上的白雲", "柏油馬路", "吹過的微風", "早上的太陽"], answer: 1, explanation: "馬路是人類鋪設出來供車輛行走的，是人文環境。" },
-                            { id: "u2_g2_q2", text: "發現社區公園的溜滑梯壞了，我們應該怎麼辦？", options: ["假裝沒看到", "繼續玩到它完全壞掉", "請大人通知里長或區公所修理", "自己拿膠水黏起來"], answer: 2, explanation: "公共設施損壞應該通報相關單位來進行專業維修，以確保安全。" },
-                            { id: "u2_g2_q3", text: "為什麼我們需要認識自己居住的地方？", options: ["因為考試會考", "為了能更好地愛護與關心家鄉", "為了能找到藏寶圖", "因為無聊"], answer: 1, explanation: "了解家鄉才能產生認同感，進而一起保護和讓社區變得更好。" },
-                            { id: "u2_g2_q4", text: "下列哪一個地方可以查到最正確的家鄉人口和面積資料？", options: ["故事書", "漫畫書", "區公所的網站", "便利商店"], answer: 2, explanation: "政府機關（如區公所、戶政事務所）的網站會有最準確的官方統計資料。" },
-                            { id: "u2_g2_q5", text: "小美的家鄉四面環海，居民大多捕魚維生。請問影響他們生活方式的最大因素是什麼？", options: ["天氣太熱", "自然環境(海洋)", "人文環境(學校)", "地圖畫錯了"], answer: 1, explanation: "四面環海屬於自然環境，這直接影響了當地居民選擇捕魚作為生活方式。" },
-                            { id: "u2_g2_q6", text: "阿嬤說以前家門前是一條小溪，現在卻變成馬路。這說明了什麼？", options: ["阿嬤記錯了", "人文環境改變了自然環境", "小溪自己會變魔術", "馬路是自然長出來的"], answer: 1, explanation: "人類為了交通便利將小溪填平鋪成馬路，這是人文環境改變自然環境的例子。" },
-                            { id: "u2_g2_q7", text: "繪製一張簡單的「社區逃生路線圖」，圖上最不應該出現什麼資訊？", options: ["滅火器的位置", "逃生出口的方向", "你最喜歡的玩具藏在哪裡", "社區管理室的電話"], answer: 2, explanation: "逃生圖應該以安全資訊為主，私人物品的位置會干擾逃生路線的判讀。" },
-                            { id: "u2_g2_q8", text: "訪問長輩時，如果長輩講到其他不相關的事情，你應該怎麼做？", options: ["大聲叫他閉嘴", "直接走掉不聽了", "耐心聆聽，再禮貌地把話題帶回來", "跟他一起聊電動"], answer: 2, explanation: "訪問長輩要有耐心與禮貌，適時地引導話題才是好的訪問技巧。" },
-                            { id: "u2_g2_q9", text: "有些山區在颱風天容易發生土石流，這可能是因為人類過度開發。這告訴我們什麼道理？", options: ["果樹種越多越好", "破壞自然環境最後會危害到人類自己", "颱風喜歡果樹", "房子蓋在山上比較安全"], answer: 1, explanation: "過度開發人文環境會破壞自然環境的平衡（水土保持），導致災害發生。" },
-                            { id: "u2_g2_q10", text: "在網路上發現有兩個網站對家鄉的歷史介紹不一樣。你應該怎麼辦？", options: ["隨便選一個抄", "兩個都不要相信", "尋找政府官方網站或圖書館的書籍來確認", "自己編一個故事"], answer: 2, explanation: "遇到資料衝突時應該尋求更具權威性的來源（如官方或學術書籍）來查證。" }
-                        ],
-                        [], [], []
+                        [], [], [], [] // 預留 第 2~5 組供日後擴充
                     ]
                 },
-                // (由於版面限制，單元 3, 4, 5 請比照上述格式，將原本的 20 題分為兩組放進 questionGroups 陣列中。這裡為了程式完整性，我先建立空殼，你可以直接貼上前一版的題目)
-                unit3: { title: "第三單元：地名的魔法故事 📜", sections: [], questionGroups: [[], [], [], [], []] },
-                unit4: { title: "第四單元：家鄉的尋寶之旅 🎁", sections: [], questionGroups: [[], [], [], [], []] },
-                unit5: { title: "第五單元：地方生活好鄰居 🤝", sections: [], questionGroups: [[], [], [], [], []] }
+                unit3: {
+                    title: "【第三單元】居住地方的地名",
+                    sections: [
+                        {
+                            title: "第1課 居住地方地名的由來",
+                            content: `<div class="story-box">🌲 <strong>地名藏著大自然：</strong><br>小豆子去彰化的「鹿港」玩，他好奇地問：「這裡真的有鹿嗎？」導遊笑著說：「以前這裡可是有很多梅花鹿跑來跑去喔！」</div>很多地名是根據<span class="keyword">動植物</span>來命名的，像「鹿港」或長滿牡丹花的「牡丹」。也有根據<span class="keyword">地形</span>來命名的，像是四周較高、中間低平的地方常有「坑」字（如：深坑）。`,
+                            infographic: `<div class="infographic"><div class="info-box" style="border-color:#2E86C1;"><span class="info-icon">⛰️</span><strong style="color:#2E86C1;">依「地形」命名</strong></div><div class="info-box" style="border-color:#27AE60;"><span class="info-icon">🦌</span><strong style="color:#27AE60;">依「動植物」命名</strong></div></div>`,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>南投縣的「竹山」鎮，你猜是因為什麼命名的？<br>💡 魔法解答區：<span class="hover-reveal">因為以前那裡長滿了竹子，是依據「植物」命名的！</span>`
+                        },
+                        {
+                            title: "第2課 探索居住地方的地名",
+                            content: `<div class="story-box">🏘️ <strong>地名藏著歷史：</strong><br>小豆子的阿姨住在台南的「官田」。原來，這裡以前是政府（官府）開墾的田地呢！</div>除了大自然，很多地名和<span class="keyword">歷史事件</span>或<span class="keyword">建築物</span>有關。像是防禦敵人的「城」（如：頭城），或是原住民語言發音翻譯過來的名字（如：艋舺，原意是獨木舟）。`,
+                            infographic: `<div class="infographic"><div class="info-box" style="background:#FDEBD0;"><span class="info-icon">🏰</span><strong style="color:#D35400;">依「建築/歷史」命名</strong></div></div>`,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>台北的「萬華」以前叫做「艋舺」，你知道這是什麼語言留下來的嗎？<br>💡 魔法解答區：<span class="hover-reveal">是平埔族（原住民）語言「獨木舟」的發音喔！</span>`
+                        }
+                    ],
+                    questionGroups: [
+                        [ // 第 1 組 (1-10題)
+                            { id: "u3_g1_q1", text: "「鹿港」這個地名，最早是因為當地有很多什麼動物而得名？", options: ["老虎", "梅花鹿", "大象", "台灣黑熊"], answer: 1, explanation: "早期當地有許多梅花鹿群活動，因此得名鹿港。" },
+                            { id: "u3_g1_q2", text: "地名中有「坑」字的地方（如深坑），通常代表當地的地形是？", options: ["高山", "平原", "四周較高中間低凹的地方", "海洋"], answer: 2, explanation: "「坑」在地形上通常指低窪、谷地。" },
+                            { id: "u3_g1_q3", text: "南投的「竹山」是因為當地以前盛產什麼植物而命名？", options: ["榕樹", "香蕉", "竹子", "甘蔗"], answer: 2, explanation: "竹山因為早期生長茂密的竹林而得名。" },
+                            { id: "u3_g1_q4", text: "台北市的「艋舺」(今萬華)，原本是原住民語中什麼交通工具的意思？", options: ["腳踏車", "馬車", "熱氣球", "獨木舟"], answer: 3, explanation: "平埔族語中，獨木舟的發音近似「艋舺」，因為當地早期是河港停滿了獨木舟。" },
+                            { id: "u3_g1_q5", text: "宜蘭的「頭城」，地名中的「城」通常代表早期先民為了什麼目的而建？", options: ["為了種水果", "為了防禦敵人與保護自己", "為了開遊樂園", "為了蓋百貨公司"], answer: 1, explanation: "「城」通常是早期漢人開墾時，為了防禦和保護居民所建立的防禦工事。" },
+                            { id: "u3_g1_q6", text: "台南的「官田」，這個地名跟下列哪一種情況有關？", options: ["有很多做官的人", "政府(官府)開墾的田地", "專門賣甜點的地方", "有很多鳥類"], answer: 1, explanation: "官田早期是政府機關招募人員來開墾的田地。" },
+                            { id: "u3_g1_q7", text: "如果一個地方叫做「樟樹灣」，我們可以猜測這裡以前可能有很多什麼？", options: ["樟樹", "蘋果樹", "海灣", "以上皆非"], answer: 0, explanation: "從字面上可以推測，當地早期可能有茂密的樟樹林。" },
+                            { id: "u3_g1_q8", text: "了解居住地方的地名由來，有什麼好處？", options: ["可以找到寶藏", "了解家鄉的歷史和自然環境", "可以買東西打折", "考試可以拿一百分"], answer: 1, explanation: "地名是家鄉歷史的縮影，能幫助我們認識家鄉的過去。" },
+                            { id: "u3_g1_q9", text: "新北市的「鶯歌」，是因為當地有一塊形狀像什麼的巨大岩石？", options: ["老鷹", "鸚鵡(鶯哥鳥)", "大象", "烏龜"], answer: 1, explanation: "鶯歌鎮山上有一塊巨石，形狀像鸚鵡(鶯哥)，因而得名。" },
+                            { id: "u3_g1_q10", text: "下列哪一個地名是依照「地形」來命名的？", options: ["大坑", "牡丹", "鹿港", "將軍"], answer: 0, explanation: "「坑」代表谷地地形；牡丹和鹿港是動植物；將軍是歷史人物。" }
+                        ],
+                        [], [], [], [] // 預留 第 2~5 組供日後擴充
+                    ]
+                },
+                unit4: {
+                    title: "【第四單元】居住地方的特色與故事",
+                    sections: [
+                        {
+                            title: "第1課 居住地方的特色",
+                            content: `<div class="story-box">🤤 <strong>好吃的家鄉味：</strong><br>小豆子最喜歡吃「台中大甲」的芋頭酥，因為大甲的水和土壤種出來的芋頭特別香！</div>每個地方因為氣候、土壤的不同，會產出特別的<span class="keyword">地方特產</span>。除了吃的（如拉拉山水蜜桃），也有用的工藝品（如鶯歌陶瓷、三義木雕），這些都成為了家鄉的驕傲。`,
+                            infographic: `<div class="infographic"><div class="info-box"><span class="info-icon">🏺</span><strong style="color:#D35400;">傳統工藝</strong></div><div class="info-box"><span class="info-icon">🍑</span><strong style="color:#C0392B;">農家特產</strong></div></div>`,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>苗栗縣的三義鄉，最出名的特產是跟「木頭」有關的工藝品，你知道是什麼嗎？<br>💡 魔法解答區：<span class="hover-reveal">是「木雕」喔！三義有非常多技術高超的木雕師傅！</span>`
+                        },
+                        {
+                            title: "第2課 居住地方的故事",
+                            content: `<div class="story-box">🎇 <strong>天上的星星掉下來了？</strong><br>元宵節時，小豆子去了新北平溪。滿天的「天燈」帶著大家的願望飛上天，真是太漂亮了！</div>很多地方會舉辦特別的<span class="keyword">節慶活動</span>，像平溪的天燈節、宜蘭的童玩節。透過這些活動和老街的故事，可以吸引很多遊客來認識我們的家鄉。`,
+                            infographic: `<div class="infographic"><div class="info-box" style="background:#FDEDEC;"><span class="info-icon">🏮</span><strong style="color:#C0392B;">平溪天燈節</strong><br><small>祈求平安順利</small></div></div>`,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>每年春天，台中大甲都會有一場非常熱鬧、大家都跟著神明走路的宗教活動，你知道是哪位神明嗎？<br>💡 魔法解答區：<span class="hover-reveal">是「媽祖」！大甲媽祖遶境是台灣非常重要的文化活動！</span>`
+                        }
+                    ],
+                    questionGroups: [
+                        [ // 第 1 組 (1-10題)
+                            { id: "u4_g1_q1", text: "新北市平溪區最著名的節慶活動是什麼？", options: ["放天燈", "划龍舟", "打陀螺", "採草莓"], answer: 0, explanation: "平溪以放天燈活動聞名國際，通常在元宵節舉辦。" },
+                            { id: "u4_g1_q2", text: "新北市「鶯歌」最著名的傳統工藝特產是什麼？", options: ["玻璃", "木雕", "陶瓷", "竹編"], answer: 2, explanation: "鶯歌有豐富的陶土資源，是台灣著名的陶瓷重鎮。" },
+                            { id: "u4_g1_q3", text: "苗栗縣「三義鄉」以哪一項傳統工藝聞名全國？", options: ["捏麵人", "木雕", "剪紙", "打鐵"], answer: 1, explanation: "三義鄉有許多木雕藝術家聚集，被稱為台灣的木雕王國。" },
+                            { id: "u4_g1_q4", text: "台中市「大甲區」除了著名的媽祖遶境，還盛產什麼好吃的農產品？", options: ["蘋果", "芋頭", "西瓜", "香蕉"], answer: 1, explanation: "大甲的土壤和水質非常適合種植芋頭，大甲芋頭非常出名。" },
+                            { id: "u4_g1_q5", text: "如果夏天想去參加「國際童玩藝術節」玩水看表演，應該去哪個縣市？", options: ["宜蘭縣", "屏東縣", "花蓮縣", "澎湖縣"], answer: 0, explanation: "童玩節是宜蘭縣每年夏天舉辦的盛大活動，地點在冬山河親水公園。" },
+                            { id: "u4_g1_q6", text: "為什麼各地會發展出不同的農特產品？", options: ["因為里長規定的", "因為氣候和土壤條件不同", "因為抽籤決定的", "因為大家亂種的"], answer: 1, explanation: "不同的氣候、地形和土壤，適合生長不同的農作物。" },
+                            { id: "u4_g1_q7", text: "家鄉的老街（如三峽老街）保存了什麼重要的價值？", options: ["可以蓋很多新大樓", "保存了過去的歷史建築與文化", "只有賣好吃的東西", "可以飆車"], answer: 1, explanation: "老街的紅磚建築和牌樓，見證了家鄉過去的商業發展與歷史。" },
+                            { id: "u4_g1_q8", text: "推廣家鄉特色的最好方法是什麼？", options: ["自己偷偷藏起來", "破壞它讓別人看不到", "舉辦文化節慶活動邀請大家來玩", "把它全部丟掉"], answer: 2, explanation: "透過節慶活動可以結合觀光，讓更多人認識家鄉的文化之美。" },
+                            { id: "u4_g1_q9", text: "桃園市「拉拉山」最出名的水果特產是什麼？", options: ["西瓜", "鳳梨", "水蜜桃", "蓮霧"], answer: 2, explanation: "拉拉山海拔較高、氣候涼爽，非常適合種植高品質的水蜜桃。" },
+                            { id: "u4_g1_q10", text: "我們參加地方的節慶活動時，應該注意什麼？", options: ["亂丟垃圾", "遵守秩序並尊重當地文化", "大聲喧嘩吵鬧", "破壞展出的作品"], answer: 1, explanation: "做一個有素養的遊客，尊重文化並保持環境整潔是基本禮貌。" }
+                        ],
+                        [], [], [], [] // 預留 第 2~5 組供日後擴充
+                    ]
+                },
+                unit5: {
+                    title: "【第五單元】地方生活",
+                    sections: [
+                        {
+                            title: "第1課 敦親睦鄰",
+                            content: `<div class="story-box">🤝 <strong>小豆子的超能力：</strong><br>小豆子每天早上看到對門的林阿姨，都會大聲說：「阿姨早安！」有一天林阿姨提了很重的菜，小豆子還幫忙按下電梯。林阿姨誇他是個小紳士！</div>住在我們附近的人就是<span class="keyword">鄰居</span>。平時見面互相打招呼、鄰居出遠門時幫忙注意安全，或是中秋節一起在社區烤肉，這就叫做「敦親睦鄰」。大家互相照顧，社區就會變得更溫暖！`,
+                            infographic: `<div class="infographic"><div class="info-box" style="border-color:#F1C40F;"><span class="info-icon">👋</span><strong style="color:#D68910;">打招呼</strong></div><div class="info-box" style="border-color:#2ECC71;"><span class="info-icon">💪</span><strong style="color:#27AE60;">互相幫忙</strong></div></div>`,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>如果鄰居在晚上 11 點大聲唱歌，讓你睡不著，你應該怎麼做比較好？<br>💡 魔法解答區：<span class="hover-reveal">可以請大人去委婉地提醒鄰居，或是請社區管理員幫忙溝通，不要直接吵架喔！</span>`
+                        },
+                        {
+                            title: "第2課 為民服務",
+                            content: `<div class="story-box">🦸 <strong>社區裡的無名英雄：</strong><br>颱風天過後，公園好多樹枝掉下來。小豆子看到穿著背心的「里長」伯伯，還有好多「社區志工」正在幫忙打掃，讓公園恢復乾淨。</div>我們的生活能這麼平安，要感謝許多為民服務的人。像是維護治安的<span class="keyword">警察</span>、滅火救人的<span class="keyword">消防員</span>，還有熱心服務社區的<span class="keyword">村里長</span>與<span class="keyword">志工</span>。我們也要當個遵守社區規定的好公民喔！`,
+                            infographic: `<div class="infographic"><div class="info-box"><span class="info-icon">👮‍♂️</span><strong>警察機關</strong><br><small>維護治安</small></div><div class="info-box"><span class="info-icon">🧑‍💼</span><strong>村/里長</strong><br><small>處理社區大小事</small></div></div>`,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>如果家裡附近的水溝塞住了，味道很臭，我們可以請誰來幫忙處理？<br>💡 魔法解答區：<span class="hover-reveal">可以聯絡「里長伯伯」，請他幫忙通報清潔隊來處理！</span>`
+                        }
+                    ],
+                    questionGroups: [
+                        [ // 第 1 組 (1-10題)
+                            { id: "u5_g1_q1", text: "遇到鄰居時，下列哪一種行為最符合「敦親睦鄰」？", options: ["假裝沒看到", "微笑打招呼", "瞪他一眼", "馬上跑走"], answer: 1, explanation: "主動打招呼是建立良好鄰里關係的第一步。" },
+                            { id: "u5_g1_q2", text: "社區裡處理大小事務，也是居民與政府之間橋樑的人是誰？", options: ["超商店長", "村（里）長", "學校校長", "大樓警衛"], answer: 1, explanation: "村里長是基層的民政人員，負責服務里民與傳達政府政令。" },
+                            { id: "u5_g1_q3", text: "如果在路上看到有車禍發生，我們應該打哪一個電話號碼請警察來處理？", options: ["119", "110", "104", "117"], answer: 1, explanation: "110 是報警專線；119 是消防救護專線。" },
+                            { id: "u5_g1_q4", text: "為了讓居住環境更美好，很多熱心居民會組成什麼團隊來打掃公園？", options: ["破壞大隊", "環保志工隊", "籃球隊", "電動遊戲隊"], answer: 1, explanation: "環保志工會利用自己的時間，無酬為社區環境整潔盡一份心力。" },
+                            { id: "u5_g1_q5", text: "晚上在家裡聽音樂或看電視時，應該注意什麼才不會影響鄰居？", options: ["把音量開到最大", "打開窗戶讓大家聽", "控制音量，不要太大聲", "叫鄰居搬走"], answer: 2, explanation: "保持適當音量，不製造噪音，是尊重鄰居的表現。" },
+                            { id: "u5_g1_q6", text: "如果發現鄰居家門口有可疑的陌生人一直徘徊，我們應該怎麼做？", options: ["跑去跟陌生人玩", "假裝沒看到回家睡覺", "告訴大人或請警衛/警察來查看", "拿石頭丟他"], answer: 2, explanation: "為了社區安全，發現可疑人物應提高警覺並通知大人或警方處理。" },
+                            { id: "u5_g1_q7", text: "下列哪一個是我們在社區公園玩耍時應該遵守的規定？", options: ["把垃圾丟在草地上", "愛護遊樂設施，排隊輪流玩", "把花圃裡的花摘回家", "在溜滑梯上畫畫"], answer: 1, explanation: "公共設施是大家共用的，應該要愛惜並遵守使用規則。" },
+                            { id: "u5_g1_q8", text: "「守望相助」的意思是什麼？", options: ["大家一起看月亮", "鄰居之間互相幫忙、注意安全", "互相監視有沒有亂花錢", "一起守在電視機前面"], answer: 1, explanation: "守望相助是指鄰里之間互相照應、防範盜賊，共同維護社區安全。" },
+                            { id: "u5_g1_q9", text: "大樓裡的電梯、走廊屬於什麼空間？", options: ["我自己的房間", "可以堆放私人雜物的地方", "大家共同使用的公共空間", "可以騎腳踏車的地方"], answer: 2, explanation: "電梯和走廊是公共空間，為了逃生安全與環境衛生，不能堆放私人物品。" },
+                            { id: "u5_g1_q10", text: "當社區要舉辦「中秋節聯歡晚會」時，我們應該抱持什麼態度？", options: ["熱情參與，藉機認識鄰居", "躲在家裡抱怨太吵", "去搞破壞", "去把食物全部吃光就走"], answer: 0, explanation: "參與社區活動是認識鄰居、增進感情的好機會。" }
+                        ],
+                        [], [], [], [] // 預留 第 2~5 組供日後擴充
+                    ]
+                }
             }
         };
 
         /* ================= MVC: Controller (邏輯層) ================= */
         let currentGrade = "grade3_term2";
         let currentUnit = "unit1";
-        // 新增狀態變數：記錄當前挑戰到哪一組 (0-4)
         let currentGroupIndex = 0; 
         
         let quizPool = [];
@@ -303,7 +366,7 @@
             populateUnitSelect();
             document.getElementById('unitSelect').addEventListener('change', (e) => {
                 currentUnit = e.target.value;
-                currentGroupIndex = 0; // 切換單元時，重置為第 1 組
+                currentGroupIndex = 0; 
                 loadContent();
             });
             loadContent();
@@ -326,7 +389,6 @@
             stopTTS(); 
             const unitData = knowledgeBase[currentGrade][currentUnit];
             
-            // 渲染微課程
             const lessonArea = document.getElementById('lessonArea');
             lessonArea.innerHTML = '';
             if(unitData.sections && unitData.sections.length > 0) {
@@ -350,20 +412,16 @@
                 });
             }
 
-            // 更新組別指示器
             document.getElementById('groupIndicator').innerText = `目前進度：第 ${currentGroupIndex + 1} 組`;
 
-            // 抓取對應組別的題目
             const currentGroupQuestions = unitData.questionGroups[currentGroupIndex] || [];
             
-            // 如果該組沒有題目，顯示提示
             if(currentGroupQuestions.length === 0) {
                 document.getElementById('quizArea').innerHTML = `<p style="text-align:center; color:#7F8C8D; font-size:1.2rem; background:white; padding:20px; border-radius:15px;">🚧 這一組的題目還在建設中，請點擊「挑戰下一組題目」或擴充題庫喔！</p>`;
                 quizPool = [];
                 return;
             }
 
-            // 載入該組的 10 題 (不打亂順序，依照陣列原本排序)
             quizPool = [...currentGroupQuestions];
             renderQuiz();
         }
@@ -430,14 +488,10 @@
             }
         }
 
-        // 新功能：挑戰下一組題目 (循環 1~5)
         function nextQuestionGroup() {
             if(confirm("確定要挑戰下一組題目嗎？目前的作答紀錄會清空喔！")) {
-                // 將索引值加 1，如果超過 4 (也就是第 5 組)，就用 % 5 取餘數回到 0 (也就是第 1 組)
                 currentGroupIndex = (currentGroupIndex + 1) % 5;
                 loadContent();
-                
-                // 將畫面捲動到測驗區標題
                 window.scrollTo({ top: document.getElementById('quizArea').offsetTop - 100, behavior: 'smooth' });
             }
         }
