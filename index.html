@@ -1,595 +1,283 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌟 國小社會樂學網</title>
-    <style>
-        /* ================= CSS 樣式區 ================= */
-        :root {
-            --primary: #4A90E2;
-            --secondary: #F39C12;
-            --bg-color: #F4F7F6;
-            --text-color: #333;
-            --card-bg: #FFFFFF;
-            --correct: #2ECC71;
-            --wrong: #E74C3C;
-        }
-
-        /* 活潑的圓點背景 */
-        body {
-            font-family: 'Comic Sans MS', '微軟正黑體', sans-serif;
-            margin: 0;
-            background-color: var(--bg-color);
-            background-image: radial-gradient(#D5D8DC 2px, transparent 2px);
-            background-size: 30px 30px;
-            color: var(--text-color);
-            line-height: 1.8;
-        }
-
-        /* 載入動畫 */
-        @keyframes popIn {
-            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* 1. 頂部固定導覽列 (Sticky Nav) */
-        header {
-            position: sticky;
-            top: 0;
-            background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%);
-            color: #333;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            border-bottom: 4px solid white;
-        }
-
-        h1 { margin: 0; font-size: 1.6rem; font-weight: 900; color: #D81B60; text-shadow: 2px 2px 0px white; }
-
-        .nav-controls select {
-            padding: 10px 15px;
-            border-radius: 25px;
-            border: 3px solid #FFF;
-            font-size: 1rem;
-            margin-left: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: #FFF;
-            color: var(--primary);
-            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
-            transition: 0.2s;
-        }
-        .nav-controls select:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.15); }
-
-        .container { max-width: 950px; margin: 30px auto; padding: 0 20px; }
-
-        .section-title {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 0 #2980B9;
-            margin-bottom: 25px;
-        }
-
-        /* 2. 互動圖文微課程區 */
-        .lesson-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            border-top: 8px solid var(--secondary);
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        .lesson-card h3 { color: #2C3E50; font-size: 1.5rem; margin-top: 0; border-bottom: 3px dashed #EEEEEE; padding-bottom: 10px; }
-
-        .tts-btn {
-            background-color: #E8F8F5;
-            border: 2px solid #1ABC9C;
-            color: #16A085;
-            padding: 10px 18px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 0 #A3E4D7;
-        }
-        .tts-btn:hover { background-color: #1ABC9C; color: white; transform: translateY(-2px); box-shadow: 0 6px 0 #16A085; }
-        .tts-btn:active { transform: translateY(2px); box-shadow: 0 0 0 transparent; }
-        .tts-btn.playing { background-color: var(--secondary); border-color: #D68910; color: white; box-shadow: 0 4px 0 #B9770E; }
-
-        .keyword {
-            background-color: #FFF3CD;
-            color: #D35400;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-weight: 900;
-            font-size: 1.1rem;
-            border-bottom: 3px solid #F39C12;
-            display: inline-block;
-            transform: rotate(-1deg);
-        }
-
-        .story-box {
-            background: #F0F8FF;
-            padding: 20px;
-            border-radius: 15px;
-            border-left: 6px solid #5DADE2;
-            margin: 15px 0;
-            font-size: 1.1rem;
-        }
-
-        /* 純代碼資訊圖卡 (Infographic) */
-        .infographic { display: flex; gap: 20px; margin: 25px 0; justify-content: center; flex-wrap: wrap; }
-        .info-box {
-            flex: 1;
-            min-width: 200px;
-            background: #FFF;
-            border: 3px solid #EAEDED;
-            border-radius: 15px;
-            text-align: center;
-            padding: 20px;
-            font-size: 1.1rem;
-            position: relative;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        .info-box:hover { transform: translateY(-5px) scale(1.02); border-color: var(--primary); }
-        .info-box.vs::after {
-            content: "VS";
-            position: absolute;
-            right: -25px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #E74C3C;
-            color: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            font-weight: 900;
-            font-size: 1.1rem;
-            z-index: 1;
-            box-shadow: 0 3px 0 #C0392B;
-        }
-        .info-box:last-child::after { display: none; }
-        .info-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; animation: float 3s ease-in-out infinite; }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .think-box {
-            background-color: #FDEDEC;
-            border: 3px dashed #E74C3C;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 25px;
-            font-size: 1.1rem;
-        }
-
-        .hover-reveal {
-            background-color: #BDC3C7;
-            color: #BDC3C7;
-            border-radius: 8px;
-            padding: 4px 12px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            user-select: none;
-            display: inline-block;
-        }
-        .hover-reveal:hover, .hover-reveal.revealed { background-color: #D4EDDA; color: #155724; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
-        /* 3. 隨堂挑戰 (Quiz) - 2x2 網格排版 */
-        .quiz-container { margin-top: 40px; }
-        .question-card {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.06);
-            border-left: 8px solid var(--primary);
-            animation: popIn 0.5s ease-out forwards;
-        }
-        .question-text { font-weight: 900; font-size: 1.25rem; margin-bottom: 15px; color: #2C3E50; }
-        
-        /* 田字型選項排版 */
-        .options {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 左右各一半，形成 2x2 */
-            gap: 15px;
-            margin-top: 15px;
-        }
-        @media (max-width: 600px) {
-            .options { grid-template-columns: 1fr; } /* 手機版自動變回單列 */
-        }
-
-        .option-label {
-            display: flex;
-            align-items: center;
-            background: #F8F9F9;
-            padding: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            border: 3px solid #E5E7E9;
-            transition: all 0.2s;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #566573;
-        }
-        .option-label:hover { border-color: var(--primary); background: #EBF5FB; transform: scale(1.02); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .option-label input { margin-right: 15px; transform: scale(1.5); cursor: pointer; accent-color: var(--primary); }
-        
-        .feedback {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            display: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            animation: popIn 0.3s ease-out;
-        }
-        .feedback.correct { background: #D4EDDA; color: #155724; border-left: 5px solid var(--correct); display: block; }
-        .feedback.wrong { background: #F8D7DA; color: #721C24; border-left: 5px solid var(--wrong); display: block; }
-
-        .action-btns { text-align: center; margin: 40px 0; }
-        .btn {
-            padding: 15px 35px;
-            font-size: 1.3rem;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 900;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.2);
-            transition: 0.1s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .btn:active { transform: translateY(6px); box-shadow: 0 0 0 transparent; }
-        .btn-submit { background-color: var(--primary); color: white; box-shadow: 0 6px 0 #2980B9; }
-        .btn-reload { background-color: #9B59B6; color: white; margin-left: 15px; box-shadow: 0 6px 0 #8E44AD; }
-        .btn-clear { background-color: #E74C3C; color: white; box-shadow: 0 4px 0 #C0392B; }
-
-        /* 4. 錯題區 (Mistakes) */
-        .mistake-card {
-            background: #FFF9E6;
-            border: 3px solid #F1C40F;
-            border-left: 10px solid #F1C40F;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            position: relative;
-            animation: popIn 0.4s ease-out;
-        }
-        .btn-learned {
-            background-color: var(--correct);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            position: absolute;
-            right: 15px;
-            bottom: 15px;
-            font-weight: bold;
-            box-shadow: 0 4px 0 #27AE60;
-            transition: 0.1s;
-        }
-        .btn-learned:active { transform: translateY(4px); box-shadow: none; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>🎮 國小社會魔法學院</h1>
-        <div class="nav-controls">
-            <select id="gradeSelect">
-                <option value="grade3_term2">三年級 (下學期)</option>
-            </select>
-            <select id="unitSelect">
-                </select>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="section-title">📖 探險微課程</div>
-        <div id="lessonArea"></div>
-
-        <div class="section-title" style="background:var(--secondary); box-shadow: 0 4px 0 #D68910;">🏆 魔王關卡：隨堂大挑戰</div>
-        <div id="quizArea"></div>
-        <div class="action-btns">
-            <button class="btn btn-submit" onclick="checkAnswers()">🚀 送出我的答案</button>
-            <button class="btn btn-reload" onclick="reloadQuiz()">🔄 重新洗牌出題</button>
-        </div>
-
-        <div class="section-title" style="background:#8E44AD; box-shadow: 0 4px 0 #732D91;">💪 我的修練筆記 (錯題區)</div>
-        <div class="action-btns" style="text-align: right; margin-top: -65px; margin-bottom: 20px;">
-            <button class="btn btn-clear" style="padding: 8px 20px; font-size: 1rem;" onclick="clearMistakes()">🗑️ 魔法大掃除(清空)</button>
-        </div>
-        <div id="mistakesArea"></div>
-    </div>
-
-    <script>
-        /* ================= MVC: Model (資料層) ================= */
+/* ================= MVC: Model (資料層 - 完整版) ================= */
         const knowledgeBase = {
             grade3_term2: {
+                // ---------- 【第一單元：生活理財大師】 ----------
+                // (請保留你原本程式碼中的 unit1 完整內容，這裡為了節省版面先縮略，以確保後面單元不會被截斷)
                 unit1: {
                     title: "第一單元：生活理財大師",
                     sections: [
                         {
                             title: "第1課：理性消費你我他 🛒",
+                            content: `<div class="story-box">👦 <strong>主角小豆子的故事：</strong><br>星期天，小豆子跟媽媽去超級市場。小豆子的水壺破洞了，所以必須買一個新水壺。但是經過玩具區時，小豆子看到最新款的變形機器人，拉著媽媽的手說：「哇！我好想要這個喔！」</div>故事中，買新水壺是因為沒有它就沒辦法喝水，這叫做<span class="keyword">需要</span>。變形機器人只是為了一時開心，這叫做<span class="keyword">想要</span>。<br><strong>💡 知識小超人說：</strong>先滿足需要，再考慮想要，這就是<strong>理性消費</strong>！`,
+                            infographic: `<div class="infographic"><div class="info-box vs"><span class="info-icon">💧</span><strong style="color:#2980B9;">「需要」的物品</strong></div><div class="info-box"><span class="info-icon">🎮</span><strong style="color:#C0392B;">「想要」的物品</strong></div></div>`,
+                            thinkBox: `🤔 <strong>腦力激盪時間：</strong>冬天超級冷，小豆子買了一件厚外套。請問這是需要還是想要？<br>💡 魔法解答區：<span class="hover-reveal">是「需要」！因為不穿厚外套會感冒生病喔！</span>`
+                        }
+                    ],
+                    questions: [
+                        { id: "u1_q1", text: "下列哪一個物品屬於維持生活「需要」的東西？", options: ["最新款的遊戲機", "每天喝的水", "遊樂園的門票", "好吃的巧克力"], answer: 1, explanation: "水是維持生命所必需的，屬於「需要」。" },
+                        // (將你原本第一單元的 15 題保留在這裡)
+                    ]
+                },
+
+                // ---------- 【第二單元：居住的地方】 ----------
+                unit2: {
+                    title: "第二單元：居住的地方 🏡",
+                    sections: [
+                        {
+                            title: "第1課：認識居住的地方 🌳",
                             content: `
                                 <div class="story-box">
-                                    👦 <strong>主角小豆子的故事：</strong><br>
-                                    星期天，小豆子跟媽媽去超級市場。小豆子的水壺破洞了，所以他們必須買一個新水壺。但是經過玩具區時，小豆子看到最新款的變形機器人，拉著媽媽的手說：「哇！我好想要這個喔！」
+                                    👦 <strong>小豆子的社區探險：</strong><br>
+                                    小豆子帶著望遠鏡在家附近探險。他看到社區後面有一座綠油油的小山丘和彎彎的小河；社區前面則有便利商店、柏油路和一間大廟。
                                 </div>
-                                故事中，買新水壺是因為沒有它就沒辦法喝水，這叫做<span class="keyword">需要</span>，是維持生活所必須的。而變形機器人只是為了一時開心，家裡已經有很多玩具了，這叫做<span class="keyword">想要</span>。<br><br>
-                                <strong>💡 知識小超人說：</strong>我們口袋裡的錢是有限的，所以買東西前要當個聰明的小偵探，先問問自己：「這是我『需要』的，還是只是一時『想要』的？」先滿足了需要，再去考慮想要，這就是超級棒的<strong>理性消費</strong>！
+                                我們居住的地方包含了兩種環境：大自然原本就有的叫做<span class="keyword">自然環境</span>（例如山丘、小河）；人類為了生活方便而建造的叫做<span class="keyword">人文環境</span>（例如道路、商店、廟宇）。
                             `,
                             infographic: `
                                 <div class="infographic">
-                                    <div class="info-box vs">
-                                        <span class="info-icon">💧</span>
-                                        <strong style="color:#2980B9; font-size:1.3rem;">「需要」的物品</strong><br>
-                                        <small style="color:#7F8C8D;">沒有它會生病或影響生活</small><br><br>
-                                        <div style="background:#EBF5FB; padding:5px; border-radius:5px;">✅ 喝的水、營養便當、制服</div>
+                                    <div class="info-box vs" style="border-color:#27AE60;">
+                                        <span class="info-icon">⛰️</span>
+                                        <strong style="color:#27AE60; font-size:1.2rem;">自然環境</strong><br>
+                                        <small>大自然原本就有的事物</small><br><br>
+                                        <div style="background:#EAFAF1; padding:5px; border-radius:5px;">山地、丘陵、河川、海岸</div>
                                     </div>
-                                    <div class="info-box">
-                                        <span class="info-icon">🎮</span>
-                                        <strong style="color:#C0392B; font-size:1.3rem;">「想要」的物品</strong><br>
-                                        <small style="color:#7F8C8D;">有了它會很開心，沒有也沒關係</small><br><br>
-                                        <div style="background:#FDEDEC; padding:5px; border-radius:5px;">❌ 第十台玩具車、超貴巧克力</div>
+                                    <div class="info-box" style="border-color:#8E44AD;">
+                                        <span class="info-icon">🏫</span>
+                                        <strong style="color:#8E44AD; font-size:1.2rem;">人文環境</strong><br>
+                                        <small>人類生活、活動建造的事物</small><br><br>
+                                        <div style="background:#F4ECF7; padding:5px; border-radius:5px;">學校、公園、醫院、馬路</div>
                                     </div>
                                 </div>
                             `,
-                            thinkBox: `🤔 <strong>腦力激盪時間：</strong><br>冬天超級冷，小豆子只有短袖，所以他買了一件厚外套。請問這件厚外套是「需要」還是「想要」？<br><br>💡 魔法解答區 (把滑鼠移上來或點擊)：<span class="hover-reveal">是「需要」！因為不穿厚外套會感冒生病喔！</span>`
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>社區裡的「公園」有樹木也有草地，它是自然環境還是人文環境呢？<br><br>💡 魔法解答區：<span class="hover-reveal">是「人文環境」！雖然有植物，但是公園是人類規劃和建造給大家休息的地方喔。</span>`
                         },
                         {
-                            title: "第2課：小豬撲滿的秘密 (儲蓄與記帳) 🐷",
+                            title: "第2課：探索家鄉的方法 🗺️",
                             content: `
                                 <div class="story-box">
-                                    💰 <strong>小豆子的夢想：</strong><br>
-                                    小豆子超級想買一台腳踏車，可是腳踏車很貴，他的零用錢不夠。爸爸笑著給了他一本小本子和一隻小豬撲滿，告訴他：「學會這兩招，夢想就能實現喔！」
+                                    👴 <strong>小豆子問爺爺：</strong><br>
+                                    小豆子想知道家鄉以前長什麼樣子。爺爺拿出了一張舊地圖，並跟小豆子說了好多以前在這裡蓋房子的故事。
                                 </div>
-                                第一招叫做<span class="keyword">儲蓄</span>，就是忍住把錢花光光的衝動，把剩下的錢放進撲滿裡存起來。<br>
-                                第二招叫做<span class="keyword">記帳</span>，就像是幫金錢寫日記。拿到零用錢叫做「收入」，買文具花掉的錢叫做「支出」，最後剩下的錢叫做「結餘」。
+                                要認識居住的地方，我們可以透過<span class="keyword">訪問長輩</span>來了解以前的故事，也可以利用<span class="keyword">地圖</span>來清楚知道街道、學校和河川的位置。現在我們還能上網查詢資料呢！
                             `,
                             infographic: `
                                 <div class="infographic">
-                                    <div class="info-box" style="background:#FEF9E7; border-color:#F1C40F;">
-                                        <span class="info-icon">📝</span>
-                                        <strong style="color:#D68910; font-size:1.2rem;">小超人的記帳公式</strong>
-                                        <div style="text-align:left; margin-top:15px; font-size:1.1rem; background:white; padding:10px; border-radius:10px;">
-                                            ➕ <strong>收入：</strong> 得到的錢 (零用錢、紅包)<br>
-                                            ➖ <strong>支出：</strong> 花掉的錢 (買文具、點心)<br>
-                                            <hr>
-                                            🟰 <strong>結餘：</strong> 剩下的錢 (拿去儲蓄！)
+                                    <div class="info-box" style="background:#FEF9E7;">
+                                        <strong style="color:#D68910;">🔍 探索家鄉三法寶</strong>
+                                        <div style="text-align:left; margin-top:10px; font-size:1rem; background:white; padding:10px; border-radius:10px;">
+                                            🗺️ <strong>看地圖：</strong> 知道東南西北與位置<br>
+                                            👴 <strong>問長輩：</strong> 了解以前的歷史與故事<br>
+                                            💻 <strong>查網路：</strong> 快速找到地方政府的介紹
                                         </div>
                                     </div>
                                 </div>
                             `,
-                            thinkBox: `🤔 <strong>金頭腦算一算：</strong><br>小豆子這個月拿到 500 元零用錢，他買了一盒 100 元的彩色筆。請問他的「結餘」是多少錢？<br><br>💡 魔法解答區 (把滑鼠移上來或點擊)：<span class="hover-reveal">500 (收入) - 100 (支出) = 400 (結餘)。他有 400 元可以拿去儲蓄喔！</span>`
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>如果小豆子想知道怎麼從家裡最快走到圖書館，他應該用哪一個法寶？<br><br>💡 魔法解答區：<span class="hover-reveal">使用「地圖」或手機導航，可以最快看出街道的路線！</span>`
                         }
                     ],
                     questions: [
-                        { id: "u1_q1", text: "下列哪一個物品屬於維持生活「需要」的東西？", options: ["最新款的遊戲機", "每天喝的水", "遊樂園的門票", "好吃的巧克力"], answer: 1, explanation: "水是維持生命所必需的，屬於「需要」；其他三項都是為了滿足欲望的「想要」。" },
-                        { id: "u1_q2", text: "買東西前，我們應該優先購買哪一種物品？", options: ["想要的", "需要的", "包裝漂亮的", "同學都有的"], answer: 1, explanation: "理性消費的第一步是先滿足生活「需要」，再考慮「想要」。" },
-                        { id: "u1_q3", text: "小華把這個月剩下的零用錢存進小豬撲滿裡，這個行為稱為什麼？", options: ["記帳", "消費", "儲蓄", "投資"], answer: 2, explanation: "把剩下的錢存起來以備不時之需，這個行為叫做「儲蓄」。" },
-                        { id: "u1_q4", text: "「記帳」最主要的好處是什麼？", options: ["可以跟父母要更多錢", "了解自己的金錢流向", "能馬上買到想要的玩具", "讓錢自動變多"], answer: 1, explanation: "記帳可以幫我們清楚記錄收入和支出，了解錢花在哪裡。" },
-                        { id: "u1_q5", text: "下列哪一種消費行為最符合「理性消費」？", options: ["看到喜歡的就買", "買東西前先列清單", "花光所有的零用錢", "只要特價就全買回家"], answer: 1, explanation: "購物前列出清單，可以避免衝動購物，是理性消費的表現。" },
-                        { id: "u1_q6", text: "小美的鉛筆盒壞了不能用，她去文具店買了一個新的。請問新鉛筆盒是？", options: ["需要", "想要", "浪費", "儲蓄"], answer: 0, explanation: "因為舊的壞了影響學習，所以買新鉛筆盒是學習的「需要」。" },
-                        { id: "u1_q7", text: "記帳的時候，如果阿公給了你 100 元，這筆錢應該記在？", options: ["支出", "收入", "結餘", "想要"], answer: 1, explanation: "別人給予或是自己賺到的錢，都屬於「收入」。" },
-                        { id: "u1_q8", text: "如果我們想要買一個很貴的腳踏車，最好的方法是？", options: ["吵著要爸媽買", "去跟同學借錢", "訂定目標並開始儲蓄", "放棄永遠不要買"], answer: 2, explanation: "透過計畫性的儲蓄，可以慢慢累積金錢達成夢想。" },
-                        { id: "u1_q9", text: "天氣變冷了，小光買了一件保暖的外套。請問這件外套是？", options: ["需要", "想要", "浪費", "借來的"], answer: 0, explanation: "為了保暖不感冒，外套是生活上的「需要」。" },
-                        { id: "u1_q10", text: "下列哪一個不是我們儲蓄的目的？", options: ["為了買未來的夢想物品", "應付突然生病看醫生的錢", "為了每天買很多零食吃", "為了未來學習的基金"], answer: 2, explanation: "每天買零食花掉錢是消費，不是儲蓄的目的。" },
-                        { id: "u1_q11", text: "在記帳本中，「結餘」的意思是什麼？", options: ["花掉的錢", "得到的錢", "收入減去支出的錢", "想買的東西的價錢"], answer: 2, explanation: "結餘 = 收入 - 支出，代表你現在手邊還剩下的錢。" },
-                        { id: "u1_q12", text: "逛超市時，遇到「買一送一」的促銷，我們應該怎麼做？", options: ["不管需不需要都買", "先想清楚家裡需不需要", "全部買下來再丟掉", "把錢全部花光"], answer: 1, explanation: "遇到促銷也要保持冷靜，評估是否真正「需要」才不會浪費。" },
-                        { id: "u1_q13", text: "小亮這個月的零用錢有 500 元，花了 300 元買文具，結餘是多少？", options: ["800元", "300元", "200元", "500元"], answer: 2, explanation: "500(收入) - 300(支出) = 200(結餘)。" },
-                        { id: "u1_q14", text: "當「想要」的東西很多，但錢不夠時，應該怎麼辦？", options: ["偷拿別人的錢", "分出輕重緩急，先買最重要的", "大哭大鬧", "跟老闆說賒帳"], answer: 1, explanation: "資源有限時，要學會排序，選擇最重要或最需要的優先。" },
-                        { id: "u1_q15", text: "下列哪一種是幫助我們控制花費的好工具？", options: ["電視", "記帳本", "故事書", "電動玩具"], answer: 1, explanation: "記帳本可以幫助我們追蹤金錢流向，控制花費。" }
+                        { id: "u2_q1", text: "下列哪一個屬於「自然環境」？", options: ["便利商店", "高速公路", "天然的河流", "圖書館"], answer: 2, explanation: "河流是大自然產生的，屬於自然環境。" },
+                        { id: "u2_q2", text: "下列哪一個屬於「人文環境」？", options: ["高山", "學校", "森林", "海洋"], answer: 1, explanation: "學校是人類為了教育而建造的，屬於人文環境。" },
+                        { id: "u2_q3", text: "要想知道家鄉以前的樣子，最好的方法是？", options: ["問外星人", "訪問地方上的長輩", "看昨天的報紙", "查字典"], answer: 1, explanation: "地方耆老(長輩)了解家鄉歷史，是很好的訪問對象。" },
+                        { id: "u2_q4", text: "我們可以利用什麼工具來快速了解家鄉的街道分布？", options: ["溫度計", "體重計", "地圖", "時鐘"], answer: 2, explanation: "地圖可以顯示地形、道路等空間資訊。" },
+                        { id: "u2_q5", text: "保護居住環境是誰的責任？", options: ["只有里長", "只有警察", "只有大人", "每一個居民"], answer: 3, explanation: "維護環境是所有居民共同的責任。" },
+                        { id: "u2_q6", text: "家鄉的「廟宇」或「教堂」屬於哪一種環境？", options: ["自然環境", "人文環境", "太空環境", "虛擬環境"], answer: 1, explanation: "這些是人類為了宗教信仰所建造的建築，屬於人文環境。" },
+                        { id: "u2_q7", text: "小明想畫一張家鄉的尋寶圖，請問這張圖最像我們生活中的什麼工具？", options: ["日曆", "課本", "地圖", "字典"], answer: 2, explanation: "尋寶圖會標示出路線和地點，和地圖的功能最相似。" },
+                        { id: "u2_q8", text: "下列哪一種不屬於認識居住地方的好方法？", options: ["到圖書館查資料", "實地去走訪觀察", "隨便聽別人亂說", "訪問社區的村里長"], answer: 2, explanation: "隨便聽信謠言可能會得到錯誤的資訊，應該查證或詢問專業人士。" },
+                        { id: "u2_q9", text: "關於自然環境與人文環境的關係，哪一個說法是正確的？", options: ["人文環境越少越好", "兩者會互相影響", "自然環境會自己變成房子", "兩者完全沒有關係"], answer: 1, explanation: "人類會在自然環境中建造房屋，同時也需要保護自然環境，兩者息息相關。" },
+                        { id: "u2_q10", text: "去訪問長輩家鄉歷史前，我們應該先做什麼準備？", options: ["準備好要問的問題", "帶電動玩具去打", "準備睡覺", "什麼都不用準備"], answer: 0, explanation: "訪問前應該先列好訪綱（要問的問題），才是有禮貌且有效率的做法。" },
+                        { id: "u2_q11", text: "下列哪一個是我們每天上學會經過的「人文環境」？", options: ["天上的白雲", "柏油馬路", "吹過的微風", "早上的太陽"], answer: 1, explanation: "馬路是人類鋪設出來供車輛行走的，是人文環境。" },
+                        { id: "u2_q12", text: "發現社區公園的溜滑梯壞了，我們應該怎麼辦？", options: ["假裝沒看到", "繼續玩到它完全壞掉", "請大人通知里長或區公所修理", "自己拿膠水黏起來"], answer: 2, explanation: "公共設施損壞應該通報相關單位來進行專業維修，以確保安全。" },
+                        { id: "u2_q13", text: "為什麼我們需要認識自己居住的地方？", options: ["因為考試會考", "為了能更好地愛護與關心家鄉", "為了能找到藏寶圖", "因為無聊"], answer: 1, explanation: "了解家鄉才能產生認同感，進而一起保護和讓社區變得更好。" },
+                        { id: "u2_q14", text: "下列哪一個地方可以查到最正確的家鄉人口和面積資料？", options: ["故事書", "漫畫書", "區公所的網站", "便利商店"], answer: 2, explanation: "政府機關（如區公所、戶政事務所）的網站會有最準確的官方統計資料。" },
+                        { id: "u2_q15", text: "小美的家鄉四面環海，居民大多捕魚維生。請問影響他們生活方式的最大因素是什麼？", options: ["天氣太熱", "自然環境(海洋)", "人文環境(學校)", "地圖畫錯了"], answer: 1, explanation: "四面環海屬於自然環境，這直接影響了當地居民選擇捕魚作為生活方式。" }
+                    ]
+                },
+
+                // ---------- 【第三單元：居住地方的地名】 ----------
+                unit3: {
+                    title: "第三單元：地名的魔法故事 📜",
+                    sections: [
+                        {
+                            title: "第1課：大自然給的名字 🦌",
+                            content: `
+                                <div class="story-box">
+                                    🌲 <strong>地名藏著大自然：</strong><br>
+                                    小豆子去彰化的「鹿港」玩，他好奇地問：「這裡真的有鹿嗎？」導遊笑著說：「以前這裡可是有很多梅花鹿跑來跑去喔！」
+                                </div>
+                                很多地名是根據<span class="keyword">動植物</span>來命名的，像「鹿港」或長滿牡丹花的「牡丹」。也有根據<span class="keyword">地形</span>來命名的，像是四周較高、中間低平的地方常有「坑」字（如：深坑）。
+                            `,
+                            infographic: `
+                                <div class="infographic">
+                                    <div class="info-box" style="border-color:#2E86C1;">
+                                        <span class="info-icon">⛰️</span>
+                                        <strong style="color:#2E86C1;">依「地形」命名</strong><br><small>如：大坑、南港</small>
+                                    </div>
+                                    <div class="info-box" style="border-color:#27AE60;">
+                                        <span class="info-icon">🦌</span>
+                                        <strong style="color:#27AE60;">依「動植物」命名</strong><br><small>如：鹿港、竹山</small>
+                                    </div>
+                                </div>
+                            `,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>南投縣的「竹山」鎮，你猜是因為什麼命名的？<br><br>💡 魔法解答區：<span class="hover-reveal">因為以前那裡長滿了竹子，是依據「植物」命名的！</span>`
+                        },
+                        {
+                            title: "第2課：先民留下的痕跡 🚢",
+                            content: `
+                                <div class="story-box">
+                                    🏘️ <strong>地名藏著歷史：</strong><br>
+                                    小豆子的阿姨住在台南的「官田」。原來，這裡以前是政府（官府）開墾的田地呢！
+                                </div>
+                                除了大自然，很多地名和<span class="keyword">歷史事件</span>或<span class="keyword">建築物</span>有關。像是防禦敵人的「城」（如：頭城），或是原住民語言發音翻譯過來的名字（如：艋舺，原意是獨木舟）。
+                            `,
+                            infographic: `
+                                <div class="infographic">
+                                    <div class="info-box" style="background:#FDEBD0;">
+                                        <span class="info-icon">🏰</span>
+                                        <strong style="color:#D35400;">依「建築/歷史」命名</strong><br><small>如：頭城、官田</small>
+                                    </div>
+                                </div>
+                            `,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>台北的「萬華」以前叫做「艋舺」，你知道這是什麼語言留下來的嗎？<br><br>💡 魔法解答區：<span class="hover-reveal">是平埔族（原住民）語言「獨木舟」的發音喔！</span>`
+                        }
+                    ],
+                    questions: [
+                        { id: "u3_q1", text: "「鹿港」這個地名，最早是因為當地有很多什麼動物而得名？", options: ["老虎", "梅花鹿", "大象", "台灣黑熊"], answer: 1, explanation: "早期當地有許多梅花鹿群活動，因此得名鹿港。" },
+                        { id: "u3_q2", text: "地名中有「坑」字的地方（如深坑），通常代表當地的地形是？", options: ["高山", "平原", "四周較高中間低凹的地方", "海洋"], answer: 2, explanation: "「坑」在地形上通常指低窪、谷地。" },
+                        { id: "u3_q3", text: "南投的「竹山」是因為當地以前盛產什麼植物而命名？", options: ["榕樹", "香蕉", "竹子", "甘蔗"], answer: 2, explanation: "竹山因為早期生長茂密的竹林而得名。" },
+                        { id: "u3_q4", text: "台北市的「艋舺」(今萬華)，原本是原住民語中什麼交通工具的意思？", options: ["腳踏車", "馬車", "熱氣球", "獨木舟"], answer: 3, explanation: "平埔族語中，獨木舟的發音近似「艋舺」，因為當地早期是河港停滿了獨木舟。" },
+                        { id: "u3_q5", text: "宜蘭的「頭城」，地名中的「城」通常代表早期先民為了什麼目的而建？", options: ["為了種水果", "為了防禦敵人與保護自己", "為了開遊樂園", "為了蓋百貨公司"], answer: 1, explanation: "「城」通常是早期漢人開墾時，為了防禦和保護居民所建立的防禦工事。" },
+                        { id: "u3_q6", text: "台南的「官田」，這個地名跟下列哪一種情況有關？", options: ["有很多做官的人", "政府(官府)開墾的田地", "專門賣甜點的地方", "有很多鳥類"], answer: 1, explanation: "官田早期是政府機關招募人員來開墾的田地。" },
+                        { id: "u3_q7", text: "如果一個地方叫做「樟樹灣」，我們可以猜測這裡以前可能有很多什麼？", options: ["樟樹", "蘋果樹", "海灣", "以上皆非"], answer: 0, explanation: "從字面上可以推測，當地早期可能有茂密的樟樹林。" },
+                        { id: "u3_q8", text: "了解居住地方的地名由來，有什麼好處？", options: ["可以找到寶藏", "了解家鄉的歷史和自然環境", "可以買東西打折", "考試可以拿一百分"], answer: 1, explanation: "地名是家鄉歷史的縮影，能幫助我們認識家鄉的過去。" },
+                        { id: "u3_q9", text: "新北市的「鶯歌」，是因為當地有一塊形狀像什麼的巨大岩石？", options: ["老鷹", "鸚鵡(鶯哥鳥)", "大象", "烏龜"], answer: 1, explanation: "鶯歌鎮山上有一塊巨石，形狀像鸚鵡(鶯哥)，因而得名。" },
+                        { id: "u3_q10", text: "下列哪一個地名是依照「地形」來命名的？", options: ["大坑", "牡丹", "鹿港", "將軍"], answer: 0, explanation: "「坑」代表谷地地形；牡丹和鹿港是動植物；將軍是歷史人物。" },
+                        { id: "u3_q11", text: "台灣有很多地名會改變，下列哪一個不是改變地名的原因？", options: ["原本的名字不好聽或不雅", "政權或時代的改變", "里長覺得無聊想換", "把原住民語換成好寫的漢字"], answer: 2, explanation: "更改地名需要經過政府法定程序，不能因為個人覺得無聊就隨便更改。" },
+                        { id: "u3_q12", text: "高雄舊名叫「打狗」，這是根據什麼命名的？", options: ["當地人喜歡打狗", "原住民平埔族語的發音", "有很多流浪狗", "地形長得像狗"], answer: 1, explanation: "「打狗」是當地平埔族馬卡道族語「竹林」的發音翻譯過來的漢字。" },
+                        { id: "u3_q13", text: "新竹舊名「竹塹」，這個名字跟什麼有關？", options: ["當地人用竹子蓋城牆(塹)", "有很多錢", "當地人喜歡吃竹筍", "天氣很熱"], answer: 0, explanation: "早期先民在周圍種植竹子作為防禦的城牆(塹)，所以叫竹塹。" },
+                        { id: "u3_q14", text: "下列哪一個地名可能和「軍隊駐紮、開墾」有關？", options: ["左營", "玫瑰", "香山", "清水"], answer: 0, explanation: "地名中有「營」、「鎮」的地方，通常與早期軍隊駐紮開墾有關(如左營、新營)。" },
+                        { id: "u3_q15", text: "我們應該用什麼態度看待家鄉的地名？", options: ["覺得很俗氣", "嘲笑別人的地名", "尊重並了解其中的歷史意義", "隨便亂改"], answer: 2, explanation: "每個地名都有其文化背景，我們應該抱持尊重並主動了解的態度。" }
+                    ]
+                },
+
+                // ---------- 【第四單元：居住地方的特色與故事】 ----------
+                unit4: {
+                    title: "第四單元：家鄉的尋寶之旅 🎁",
+                    sections: [
+                        {
+                            title: "第1課：聞名全國的地方特產 🍠",
+                            content: `
+                                <div class="story-box">
+                                    🤤 <strong>好吃的家鄉味：</strong><br>
+                                    小豆子最喜歡吃「台中大甲」的芋頭酥，因為大甲的水和土壤種出來的芋頭特別香！
+                                </div>
+                                每個地方因為氣候、土壤的不同，會產出特別的<span class="keyword">地方特產</span>。除了吃的（如拉拉山水蜜桃），也有用的工藝品（如鶯歌陶瓷、三義木雕），這些都成為了家鄉的驕傲。
+                            `,
+                            infographic: `
+                                <div class="infographic">
+                                    <div class="info-box"><span class="info-icon">🏺</span><strong style="color:#D35400;">傳統工藝</strong><br><small>新北鶯歌：陶瓷</small></div>
+                                    <div class="info-box"><span class="info-icon">🍑</span><strong style="color:#C0392B;">農家特產</strong><br><small>桃園拉拉山：水蜜桃</small></div>
+                                </div>
+                            `,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>苗栗縣的三義鄉，最出名的特產是跟「木頭」有關的工藝品，你知道是什麼嗎？<br><br>💡 魔法解答區：<span class="hover-reveal">是「木雕」喔！三義有非常多技術高超的木雕師傅！</span>`
+                        },
+                        {
+                            title: "第2課：熱鬧的節慶與故事 🏮",
+                            content: `
+                                <div class="story-box">
+                                    🎇 <strong>天上的星星掉下來了？</strong><br>
+                                    元宵節時，小豆子去了新北平溪。滿天的「天燈」帶著大家的願望飛上天，真是太漂亮了！
+                                </div>
+                                很多地方會舉辦特別的<span class="keyword">節慶活動</span>，像平溪的天燈節、宜蘭的童玩節。透過這些活動和老街的故事，可以吸引很多遊客來認識我們的家鄉。
+                            `,
+                            infographic: `
+                                <div class="infographic">
+                                    <div class="info-box" style="background:#FDEDEC;">
+                                        <span class="info-icon">🏮</span><strong style="color:#C0392B;">平溪天燈節</strong><br><small>祈求平安順利</small>
+                                    </div>
+                                </div>
+                            `,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>每年春天，台中大甲都會有一場非常熱鬧、大家都跟著神明走路的宗教活動，你知道是哪位神明嗎？<br><br>💡 魔法解答區：<span class="hover-reveal">是「媽祖」！大甲媽祖遶境是台灣非常重要的文化活動！</span>`
+                        }
+                    ],
+                    questions: [
+                        { id: "u4_q1", text: "新北市平溪區最著名的節慶活動是什麼？", options: ["放天燈", "划龍舟", "打陀螺", "採草莓"], answer: 0, explanation: "平溪以放天燈活動聞名國際，通常在元宵節舉辦。" },
+                        { id: "u4_q2", text: "新北市「鶯歌」最著名的傳統工藝特產是什麼？", options: ["玻璃", "木雕", "陶瓷", "竹編"], answer: 2, explanation: "鶯歌有豐富的陶土資源，是台灣著名的陶瓷重鎮。" },
+                        { id: "u4_q3", text: "苗栗縣「三義鄉」以哪一項傳統工藝聞名全國？", options: ["捏麵人", "木雕", "剪紙", "打鐵"], answer: 1, explanation: "三義鄉有許多木雕藝術家聚集，被稱為台灣的木雕王國。" },
+                        { id: "u4_q4", text: "台中市「大甲區」除了著名的媽祖遶境，還盛產什麼好吃的農產品？", options: ["蘋果", "芋頭", "西瓜", "香蕉"], answer: 1, explanation: "大甲的土壤和水質非常適合種植芋頭，大甲芋頭非常出名。" },
+                        { id: "u4_q5", text: "如果夏天想去參加「國際童玩藝術節」玩水看表演，應該去哪個縣市？", options: ["宜蘭縣", "屏東縣", "花蓮縣", "澎湖縣"], answer: 0, explanation: "童玩節是宜蘭縣每年夏天舉辦的盛大活動，地點在冬山河親水公園。" },
+                        { id: "u4_q6", text: "為什麼各地會發展出不同的農特產品？", options: ["因為里長規定的", "因為氣候和土壤條件不同", "因為抽籤決定的", "因為大家亂種的"], answer: 1, explanation: "不同的氣候、地形和土壤，適合生長不同的農作物。" },
+                        { id: "u4_q7", text: "家鄉的老街（如三峽老街）保存了什麼重要的價值？", options: ["可以蓋很多新大樓", "保存了過去的歷史建築與文化", "只有賣好吃的東西", "可以飆車"], answer: 1, explanation: "老街的紅磚建築和牌樓，見證了家鄉過去的商業發展與歷史。" },
+                        { id: "u4_q8", text: "推廣家鄉特色的最好方法是什麼？", options: ["自己偷偷藏起來", "破壞它讓別人看不到", "舉辦文化節慶活動邀請大家來玩", "把它全部丟掉"], answer: 2, explanation: "透過節慶活動可以結合觀光，讓更多人認識家鄉的文化之美。" },
+                        { id: "u4_q9", text: "桃園市「拉拉山」最出名的水果特產是什麼？", options: ["西瓜", "鳳梨", "水蜜桃", "蓮霧"], answer: 2, explanation: "拉拉山海拔較高、氣候涼爽，非常適合種植高品質的水蜜桃。" },
+                        { id: "u4_q10", text: "我們參加地方的節慶活動時，應該注意什麼？", options: ["亂丟垃圾", "遵守秩序並尊重當地文化", "大聲喧嘩吵鬧", "破壞展出的作品"], answer: 1, explanation: "做一個有素養的遊客，尊重文化並保持環境整潔是基本禮貌。" },
+                        { id: "u4_q11", text: "下列哪一個不是保護家鄉文化的做法？", options: ["成立地方故事館", "拆掉所有舊房子蓋工廠", "學習家鄉的傳統技藝", "參加家鄉的導覽活動"], answer: 1, explanation: "拆除具有歷史價值的舊房子會破壞文化資產，是不對的做法。" },
+                        { id: "u4_q12", text: "屏東縣的「東港」有著名的燒王船祭典，這裡也盛產什麼海鮮？", options: ["黑鮪魚", "大閘蟹", "帝王蟹", "鮭魚"], answer: 0, explanation: "東港是台灣重要的漁港，以黑鮪魚（黑甕串）最為著名。" },
+                        { id: "u4_q13", text: "如果你是家鄉的小導遊，你該怎麼介紹家鄉？", options: ["說家鄉很無聊", "介紹家鄉的特產和有趣的故事", "一直不講話", "叫大家趕快回家"], answer: 1, explanation: "分享特產和故事可以讓遊客對你的家鄉留下深刻且美好的印象。" },
+                        { id: "u4_q14", text: "新竹地區因為常吹強烈的「九降風」，所以當地居民利用這個氣候特色製作了什麼特產？", options: ["米粉和柿餅", "冰淇淋", "烤肉", "火鍋"], answer: 0, explanation: "新竹的強風非常適合風乾食物，因此造就了新竹米粉和新埔柿餅。" },
+                        { id: "u4_q15", text: "每個地方的故事和特色，是誰傳承下來的？", options: ["外星人", "政府的機器人", "世世代代生活在這裡的居民", "魔法師"], answer: 2, explanation: "文化和特色都是由當地的居民一代一代保留並傳承下來的珍貴資產。" }
+                    ]
+                },
+
+                // ---------- 【第五單元：地方生活】 ----------
+                unit5: {
+                    title: "第五單元：地方生活好鄰居 🤝",
+                    sections: [
+                        {
+                            title: "第1課：敦親睦鄰笑瞇瞇 😊",
+                            content: `
+                                <div class="story-box">
+                                    🤝 <strong>小豆子的超能力：</strong><br>
+                                    小豆子每天早上看到對門的林阿姨，都會大聲說：「阿姨早安！」有一天林阿姨提了很重的菜，小豆子還幫忙按下電梯。林阿姨誇他是個小紳士！
+                                </div>
+                                住在我們附近的人就是<span class="keyword">鄰居</span>。平時見面互相打招呼、鄰居出遠門時幫忙注意安全，或是中秋節一起在社區烤肉，這就叫做「敦親睦鄰」。大家互相照顧，社區就會變得更溫暖！
+                            `,
+                            infographic: `
+                                <div class="infographic">
+                                    <div class="info-box" style="border-color:#F1C40F;">
+                                        <span class="info-icon">👋</span><strong style="color:#D68910;">打招呼</strong><br><small>見面微笑問好</small>
+                                    </div>
+                                    <div class="info-box" style="border-color:#2ECC71;">
+                                        <span class="info-icon">💪</span><strong style="color:#27AE60;">互相幫忙</strong><br><small>幫忙留意陌生人</small>
+                                    </div>
+                                </div>
+                            `,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>如果鄰居在晚上 11 點大聲唱歌，讓你睡不著，你應該怎麼做比較好？<br><br>💡 魔法解答區：<span class="hover-reveal">可以請大人去委婉地提醒鄰居，或是請社區管理員幫忙溝通，不要直接吵架喔！</span>`
+                        },
+                        {
+                            title: "第2課：為民服務的英雄們 🦸‍♂️",
+                            content: `
+                                <div class="story-box">
+                                    🦸 <strong>社區裡的無名英雄：</strong><br>
+                                    颱風天過後，公園好多樹枝掉下來。小豆子看到穿著背心的「里長」伯伯，還有好多「社區志工」正在幫忙打掃，讓公園恢復乾淨。
+                                </div>
+                                我們的生活能這麼平安，要感謝許多為民服務的人。像是維護治安的<span class="keyword">警察</span>、滅火救人的<span class="keyword">消防員</span>，還有熱心服務社區的<span class="keyword">村里長</span>與<span class="keyword">志工</span>。我們也要當個遵守社區規定的好公民喔！
+                            `,
+                            infographic: `
+                                <div class="infographic">
+                                    <div class="info-box"><span class="info-icon">👮‍♂️</span><strong>警察機關</strong><br><small>維護治安、指揮交通</small></div>
+                                    <div class="info-box"><span class="info-icon">🧑‍💼</span><strong>村/里長</strong><br><small>處理社區大小事、廣播</small></div>
+                                </div>
+                            `,
+                            thinkBox: `🤔 <strong>腦力激盪：</strong>如果家裡附近的水溝塞住了，味道很臭，我們可以請誰來幫忙處理？<br><br>💡 魔法解答區：<span class="hover-reveal">可以聯絡「里長伯伯」，請他幫忙通報清潔隊來處理！</span>`
+                        }
+                    ],
+                    questions: [
+                        { id: "u5_q1", text: "遇到鄰居時，下列哪一種行為最符合「敦親睦鄰」？", options: ["假裝沒看到", "微笑打招呼", "瞪他一眼", "馬上跑走"], answer: 1, explanation: "主動打招呼是建立良好鄰里關係的第一步。" },
+                        { id: "u5_q2", text: "社區裡處理大小事務，也是居民與政府之間橋樑的人是誰？", options: ["超商店長", "村（里）長", "學校校長", "大樓警衛"], answer: 1, explanation: "村里長是基層的民政人員，負責服務里民與傳達政府政令。" },
+                        { id: "u5_q3", text: "如果在路上看到有車禍發生，我們應該打哪一個電話號碼請警察來處理？", options: ["119", "110", "104", "117"], answer: 1, explanation: "110 是報警專線；119 是消防救護專線。" },
+                        { id: "u5_q4", text: "為了讓居住環境更美好，很多熱心居民會組成什麼團隊來打掃公園？", options: ["破壞大隊", "環保志工隊", "籃球隊", "電動遊戲隊"], answer: 1, explanation: "環保志工會利用自己的時間，無酬為社區環境整潔盡一份心力。" },
+                        { id: "u5_q5", text: "晚上在家裡聽音樂或看電視時，應該注意什麼才不會影響鄰居？", options: ["把音量開到最大", "打開窗戶讓大家聽", "控制音量，不要太大聲", "叫鄰居搬走"], answer: 2, explanation: "保持適當音量，不製造噪音，是尊重鄰居的表現。" },
+                        { id: "u5_q6", text: "如果發現鄰居家門口有可疑的陌生人一直徘徊，我們應該怎麼做？", options: ["跑去跟陌生人玩", "假裝沒看到回家睡覺", "告訴大人或請警衛/警察來查看", "拿石頭丟他"], answer: 2, explanation: "為了社區安全，發現可疑人物應提高警覺並通知大人或警方處理。" },
+                        { id: "u5_q7", text: "下列哪一個是我們在社區公園玩耍時應該遵守的規定？", options: ["把垃圾丟在草地上", "愛護遊樂設施，排隊輪流玩", "把花圃裡的花摘回家", "在溜滑梯上畫畫"], answer: 1, explanation: "公共設施是大家共用的，應該要愛惜並遵守使用規則。" },
+                        { id: "u5_q8", text: "「守望相助」的意思是什麼？", options: ["大家一起看月亮", "鄰居之間互相幫忙、注意安全", "互相監視有沒有亂花錢", "一起守在電視機前面"], answer: 1, explanation: "守望相助是指鄰里之間互相照應、防範盜賊，共同維護社區安全。" },
+                        { id: "u5_q9", text: "大樓裡的電梯、走廊屬於什麼空間？", options: ["我自己的房間", "可以堆放私人雜物的地方", "大家共同使用的公共空間", "可以騎腳踏車的地方"], answer: 2, explanation: "電梯和走廊是公共空間，為了逃生安全與環境衛生，不能堆放私人物品。" },
+                        { id: "u5_q10", text: "當社區要舉辦「中秋節聯歡晚會」時，我們應該抱持什麼態度？", options: ["熱情參與，藉機認識鄰居", "躲在家裡抱怨太吵", "去搞破壞", "去把食物全部吃光就走"], answer: 0, explanation: "參與社區活動是認識鄰居、增進感情的好機會。" },
+                        { id: "u5_q11", text: "消防員叔叔阿姨的工作不包含下列哪一項？", options: ["撲滅火災", "抓小偷開罰單", "駕駛救護車載送傷患", "幫助受困的動物或民眾"], answer: 1, explanation: "抓小偷和開罰單是「警察」的工作，消防員主要負責救災與救護。" },
+                        { id: "u5_q12", text: "社區的布告欄主要的功能是什麼？", options: ["讓小朋友亂塗鴉", "張貼廣告傳單", "公布社區的重要事項和活動通知", "用來貼明星海報"], answer: 2, explanation: "布告欄是社區傳遞資訊的重要管道，如停水通知或活動時間。" },
+                        { id: "u5_q13", text: "如果家裡要裝潢敲打，可能會發出很大的噪音，應該怎麼做比較有禮貌？", options: ["半夜再敲比較涼快", "先貼公告或親自向鄰居說抱歉", "跟鄰居說你管不著", "故意敲更大聲"], answer: 1, explanation: "施工前先告知鄰居，能讓鄰居有心理準備，減少誤會與衝突。" },
+                        { id: "u5_q14", text: "做一個好鄰居，不應該出現下列哪種行為？", options: ["在走廊奔跑大聲尖叫", "把垃圾確實分類丟進垃圾子母車", "見面微笑點頭", "幫忙按住電梯等別人進來"], answer: 0, explanation: "在公共空間大聲喧嘩會吵到別人，不是好鄰居的行為。" },
+                        { id: "u5_q15", text: "為什麼社區需要志工？", options: ["因為里長很懶惰", "因為政府規定每個人都要當", "志工熱心奉獻，能讓社區變得更美好", "為了賺很多錢"], answer: 2, explanation: "志工是不求回報、熱心服務的人，他們的付出能提升社區的生活品質。" }
                     ]
                 }
             }
         };
-
-        /* ================= MVC: Controller (邏輯層，與前版相同) ================= */
-        let currentGrade = "grade3_term2";
-        let currentUnit = "unit1";
-        let quizPool = [];
-        let ttsSpeaker = window.speechSynthesis;
-        let currentUtterance = null;
-        let activeTTSBtn = null;
-
-        function init() {
-            populateUnitSelect();
-            document.getElementById('unitSelect').addEventListener('change', (e) => {
-                currentUnit = e.target.value;
-                loadContent();
-            });
-            loadContent();
-            renderMistakes();
-        }
-
-        function populateUnitSelect() {
-            const unitSelect = document.getElementById('unitSelect');
-            unitSelect.innerHTML = '';
-            const units = knowledgeBase[currentGrade];
-            for (let unitKey in units) {
-                let option = document.createElement('option');
-                option.value = unitKey;
-                option.textContent = units[unitKey].title;
-                unitSelect.appendChild(option);
-            }
-        }
-
-        function loadContent() {
-            stopTTS(); 
-            const unitData = knowledgeBase[currentGrade][currentUnit];
-            
-            const lessonArea = document.getElementById('lessonArea');
-            lessonArea.innerHTML = '';
-            unitData.sections.forEach((sec) => {
-                const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'lesson-card';
-                
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = sec.content + sec.thinkBox;
-                const hiddenElements = tempDiv.querySelectorAll('.hover-reveal');
-                hiddenElements.forEach(el => el.remove());
-                const textToRead = sec.title + "。 " + tempDiv.innerText;
-
-                sectionDiv.innerHTML = `
-                    <h3>${sec.title}</h3>
-                    <button class="tts-btn" onclick="toggleTTS('${textToRead.replace(/\n/g, ' ')}', this)">🔊 呼叫語音小幫手</button>
-                    <div>${sec.content}</div>
-                    ${sec.infographic}
-                    <div class="think-box">${sec.thinkBox}</div>
-                `;
-                lessonArea.appendChild(sectionDiv);
-            });
-
-            quizPool = [...unitData.questions].sort(() => Math.random() - 0.5);
-            renderQuiz();
-        }
-
-        function renderQuiz() {
-            const quizArea = document.getElementById('quizArea');
-            quizArea.innerHTML = '';
-            
-            quizPool.forEach((q, index) => {
-                const qDiv = document.createElement('div');
-                qDiv.className = 'question-card';
-                qDiv.dataset.id = q.id;
-                
-                let qTextToRead = `第${index + 1}題。${q.text}。選項有：`;
-                q.options.forEach((opt, i) => { qTextToRead += `${i+1}，${opt}。`; });
-
-                let optionsHTML = q.options.map((opt, i) => `
-                    <label class="option-label">
-                        <input type="radio" name="q_${q.id}" value="${i}">
-                        <span>${i + 1}. ${opt}</span>
-                    </label>
-                `).join('');
-
-                qDiv.innerHTML = `
-                    <div class="question-text">
-                        <span style="color:var(--primary);">Q${index + 1}:</span> ${q.text}
-                        <button class="tts-btn" style="padding:4px 12px; font-size:0.9rem; margin-left:10px; box-shadow: 0 3px 0 #A3E4D7; border-radius:15px;" onclick="toggleTTS('${qTextToRead}', this)">🔊 唸題目</button>
-                    </div>
-                    <div class="options">${optionsHTML}</div>
-                    <div class="feedback" id="feedback_${q.id}"></div>
-                `;
-                quizArea.appendChild(qDiv);
-            });
-        }
-
-        function checkAnswers() {
-            let allAnswered = true;
-            quizPool.forEach(q => {
-                const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
-                const feedbackDiv = document.getElementById(`feedback_${q.id}`);
-                
-                if (!selected) {
-                    allAnswered = false;
-                    return;
-                }
-
-                const answerVal = parseInt(selected.value);
-                if (answerVal === q.answer) {
-                    feedbackDiv.className = 'feedback correct';
-                    feedbackDiv.innerHTML = `🎉 太棒了！答對囉！`;
-                } else {
-                    feedbackDiv.className = 'feedback wrong';
-                    feedbackDiv.innerHTML = `😢 哎呀！答錯囉。正確答案是 <strong>${q.answer + 1}</strong>。<br>💡 魔法詳解：${q.explanation}`;
-                    saveMistake(q);
-                }
-            });
-
-            if (!allAnswered) {
-                alert("👀 偵探小豆子發現：還有題目沒有回答完喔！");
-            } else {
-                window.scrollTo({ top: document.getElementById('quizArea').offsetTop - 50, behavior: 'smooth' });
-            }
-        }
-
-        function reloadQuiz() {
-            if(confirm("確定要重新隨機出題嗎？目前的過關紀錄會清空喔！")) loadContent();
-        }
-
-        /* 語音與儲存功能 (維持原樣) */
-        function toggleTTS(text, btnElement) {
-            if (activeTTSBtn === btnElement && ttsSpeaker.speaking) {
-                if (ttsSpeaker.paused) { ttsSpeaker.resume(); btnElement.classList.add('playing'); } 
-                else { ttsSpeaker.pause(); btnElement.classList.remove('playing'); }
-                return;
-            }
-            stopTTS();
-            activeTTSBtn = btnElement;
-            btnElement.classList.add('playing');
-            currentUtterance = new SpeechSynthesisUtterance(text);
-            currentUtterance.lang = 'zh-TW';
-            currentUtterance.pitch = 1.0;
-            currentUtterance.rate = 0.9;
-            currentUtterance.onend = () => { btnElement.classList.remove('playing'); activeTTSBtn = null; };
-            ttsSpeaker.speak(currentUtterance);
-        }
-        function stopTTS() {
-            if (ttsSpeaker.speaking) { ttsSpeaker.cancel(); if (activeTTSBtn) { activeTTSBtn.classList.remove('playing'); activeTTSBtn = null; } }
-        }
-
-        function getStorageKey() { return `mistakes_${currentGrade}_${currentUnit}`; }
-        function saveMistake(qObj) {
-            const key = getStorageKey();
-            let mistakes = JSON.parse(localStorage.getItem(key)) || [];
-            if (!mistakes.find(m => m.id === qObj.id)) { mistakes.push(qObj); localStorage.setItem(key, JSON.stringify(mistakes)); renderMistakes(); }
-        }
-        function removeMistake(qId) {
-            const key = getStorageKey();
-            let mistakes = JSON.parse(localStorage.getItem(key)) || [];
-            mistakes = mistakes.filter(m => m.id !== qId);
-            localStorage.setItem(key, JSON.stringify(mistakes));
-            renderMistakes();
-        }
-        function clearMistakes() {
-            if(confirm("確定要清空這個單元所有的錯題筆記嗎？")) { localStorage.removeItem(getStorageKey()); renderMistakes(); }
-        }
-
-        function renderMistakes() {
-            const area = document.getElementById('mistakesArea');
-            let mistakes = JSON.parse(localStorage.getItem(getStorageKey())) || [];
-            if (mistakes.length === 0) { area.innerHTML = '<p style="text-align:center; color:#7F8C8D; font-size:1.2rem; background:white; padding:20px; border-radius:15px;">太棒了！目前沒有錯題筆記喔 🎉 繼續保持！</p>'; return; }
-            area.innerHTML = '';
-            mistakes.forEach(q => {
-                const mDiv = document.createElement('div');
-                mDiv.className = 'mistake-card';
-                let qTextToRead = `錯題複習。${q.text}。正確答案是：${q.options[q.answer]}。說明：${q.explanation}`;
-                mDiv.innerHTML = `
-                    <button class="btn-learned" onclick="removeMistake('${q.id}')">✅ 我已經學會了</button>
-                    <div style="font-weight:900; font-size:1.1rem; margin-bottom:8px; padding-right:120px; color:#2C3E50;">Q: ${q.text}</div>
-                    <div style="color:#27AE60; font-weight:bold; margin-bottom:8px;">✓ 正確答案：${q.answer + 1}. ${q.options[q.answer]}</div>
-                    <div style="color:#7F8C8D; font-size:1rem; margin-bottom:15px; background:white; padding:10px; border-radius:8px;">💡 魔法詳解：${q.explanation}</div>
-                    <button class="tts-btn" style="padding:6px 15px; font-size:0.9rem; margin:0;" onclick="toggleTTS('${qTextToRead}', this)">🔊 唸這題給我聽</button>
-                `;
-                area.appendChild(mDiv);
-            });
-        }
-
-        window.onload = init;
-    </script>
-</body>
-</html>
